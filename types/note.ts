@@ -1,39 +1,14 @@
-export type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
-
 export interface Note {
-  id: string;
+  id: number;
   title: string;
   content: string;
-  tag: NoteTag;
-  isArchived: boolean;
+  tag: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface NewNotePayload {
+export interface NoteFormData {
   title: string;
-  content?: string;
-  tag: NoteTag;
-}
-
-export interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
-}
-export interface FetchNotesParams {
-  page?: number;
-  perPage?: number;
-  search?: string;
-  tag?: string;
-}
-
-export interface FetchNotesResponse {
-  notes: Note[];
-  totalPages: number;
-}
-export interface FetchNotesParams {
-  page?: number;
-  perPage?: number;
-  search?: string;
-  tag?: string;
+  content: string;
+  tag: 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 }
