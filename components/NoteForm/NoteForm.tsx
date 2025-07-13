@@ -1,11 +1,10 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "@/lib/api";
+import { createNote } from "@/lib/api/clientApi";
 import css from "./NoteForm.module.css";
 import { useRouter } from "next/navigation";
 import { useNoteStore } from "@/lib/store/noteStore";
-import { NoteTag } from "@/types/note";
 
 const NoteForm = () => {
   const router = useRouter();
@@ -20,8 +19,27 @@ const NoteForm = () => {
       router.back();
     },
   });
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setDraft({ ...draft, [event.target.name]: event.target.value });
+  };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!draft.title.trim()) {
+      alert("Title is required");
+      return;
+    }
+    if (draft.title.trim().length < 3) {
+      alert("Title must be at least 3 characters");
+      return;
+    }
+    if (draft.content.length < 5) {
+      alert("Content must be at least 10 characters");
+      return;
+    }
     mutate(draft);
   };
   return (
@@ -35,7 +53,7 @@ const NoteForm = () => {
           className={css.input}
           required
           value={draft.title}
-          onChange={(e) => setDraft({ title: e.target.value })}
+          onChange={handleChange}
         />
       </div>
 
@@ -47,7 +65,7 @@ const NoteForm = () => {
           className={css.textarea}
           rows={4}
           value={draft.content}
-          onChange={(e) => setDraft({ content: e.target.value })}
+          onChange={handleChange}
         />
       </div>
 
@@ -58,7 +76,7 @@ const NoteForm = () => {
           name="tag"
           className={css.select}
           value={draft.tag}
-          onChange={(e) => setDraft({ tag: e.target.value as NoteTag })}
+          onChange={handleChange}
         >
           <option value="Todo">Todo</option>
           <option value="Work">Work</option>

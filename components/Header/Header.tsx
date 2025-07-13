@@ -1,7 +1,8 @@
-import Link from 'next/link';
-import TagsMenu from '../TagsMenu/TagsMenu';
+import Link from "next/link";
+import TagsMenu from "../TagsMenu/TagsMenu";
 
-import css from '@/components/Header/Header.module.css';
+import css from "@/components/Header/Header.module.css";
+import AuthNavigation from "../AuthNavigation/AuthNavigation";
 
 const Header = async () => {
   return (
@@ -19,6 +20,7 @@ const Header = async () => {
           <li className={css.navigationItem}>
             <TagsMenu />
           </li>
+          <AuthNavigation />
         </ul>
       </nav>
     </header>

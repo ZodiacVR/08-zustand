@@ -1,3 +1,3 @@
 export default function ModalFallback() {
-    return null;
-  }
+  return null;
+}

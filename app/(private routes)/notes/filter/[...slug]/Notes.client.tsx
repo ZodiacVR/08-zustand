@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { fetchNotes } from "@/lib/api";
-import type { FetchNotesResponse } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/clientApi";
+import type { FetchNotesResponse } from "@/types/note";
 
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
@@ -12,11 +12,10 @@ import css from "./NotesPage.module.css";
 import { useDebounce } from "use-debounce";
 import Link from "next/link";
 
-const PER_PAGE = Number(process.env.NEXT_PUBLIC_NOTES_PER_PAGE) || 12;
-if (Number.isNaN(PER_PAGE)) {
+const PER_PAGE = Number(process.env.NEXT_PUBLIC_NOTES_PER_PAGE);
+if (!PER_PAGE || Number.isNaN(PER_PAGE)) {
   throw new Error("Invalid NEXT_PUBLIC_NOTES_PER_PAGE, defaulting to 12");
 }
-
 interface NotesClientProps {
   initialData: FetchNotesResponse;
   tag: string;
@@ -38,10 +37,9 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
       }),
     staleTime: 1000 * 60 * 5,
     placeholderData: keepPreviousData,
-    initialData: page === 1 && debouncedSearchTerm === "" ? initialData : undefined,
+    initialData:
+      page === 1 && debouncedSearchTerm === "" ? initialData : undefined,
   });
-
-  console.log('Query result:', { data, isError, error });
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
@@ -54,6 +52,7 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox value={searchTerm} onChange={handleSearchChange} />
+
         {totalPages > 1 && (
           <Pagination
             pageCount={totalPages}
@@ -61,17 +60,20 @@ const NotesClient = ({ tag, initialData }: NotesClientProps) => {
             onPageChange={(selectedPage: number) => setPage(selectedPage)}
           />
         )}
+
         <Link href="/notes/action/create" className={css.button}>
           Create note +
         </Link>
       </header>
+
       {isLoading && <p>Loading notes...</p>}
       {isError && (
         <div className={css.errorBox}>
-          <p>Could not fetch the list of notes.</p>
+          <p>Something went wrong. Please try again.</p>
           <pre>{(error as Error).message}</pre>
         </div>
       )}
+
       {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
       {data && data.notes.length === 0 && (
         <p className={css.empty}>No notes found. Try adjusting your search.</p>

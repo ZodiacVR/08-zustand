@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import NotesClient from "./Notes.client";
-import { fetchNotes } from "@/lib/api";
+
+import { fetchServerNotes } from "@/lib/api/serverApi";
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
@@ -17,7 +18,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${capitalizedTag} – Notes | NoteHub`,
       description: `Notes list with tag "${capitalizedTag}" in NoteHub.`,
-      url: `https://08-zustand-git-main-pavlomarkovskyis-projects.vercel.app/notes/filter/${tag}`,
+      url: `https://09-auth-kappa.vercel.app//notes/filter/${tag}`,
       images: [
         {
           url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
@@ -35,7 +36,7 @@ export default async function NotesPage({ params }: PageProps) {
 
   const tag = slug?.[0] ?? "All";
 
-  const initialData = await fetchNotes({
+  const initialData = await fetchServerNotes({
     page: 1,
     perPage: 12,
     tag: tag === "All" ? undefined : tag,

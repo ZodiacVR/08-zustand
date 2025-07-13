@@ -4,6 +4,7 @@ import "./globals.css";
 import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import AuthProvider from "@/components/AuthProvider/AuthProvider";
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
     title: "NoteHub App - онлайн-замітки",
     description:
       "NoteHub App - це безкоштовний онлайн-сервіс для створення та зберігання заміток.",
-    url: "https://08-zustand-git-main-pavlomarkovskyis-projects.vercel.app/",
+    url: "https://vercel.com/pavlomarkovskyis-projects/09-auth",
     images: [
       {
         url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
@@ -44,12 +45,14 @@ export default function RootLayout({
       </head>
       <body className={roboto.variable}>
         <TanStackProvider>
-          <Header />
-          <main>
-            {children}
-            {modal}
-          </main>
-          <Footer />
+          <AuthProvider>
+            <Header />
+            <main>
+              {children}
+              {modal}
+            </main>
+            <Footer />
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteNote } from '@/lib/api';
-import type { Note } from '../../types/note';
-import css from './NoteList.module.css';
-import Link from 'next/link';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteNote } from "@/lib/api/clientApi";
+import type { Note } from "../../types/note";
+import css from "./NoteList.module.css";
+import Link from "next/link";
 
 interface NoteListProps {
   notes: Note[];
@@ -18,12 +18,12 @@ const NoteList = ({ notes }: NoteListProps) => {
     isPending,
     variables,
   } = useMutation({
-    mutationFn: (id: number) => deleteNote(id),
+    mutationFn: (id: string) => deleteNote(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
-    onError: error => {
-      console.error('Failed to delete note:', error);
+    onError: (error) => {
+      console.error("Failed to delete note:", error);
     },
   });
 
@@ -31,7 +31,7 @@ const NoteList = ({ notes }: NoteListProps) => {
 
   return (
     <ul className={css.list}>
-      {notes.map(note => (
+      {notes.map((note) => (
         <li key={note.id} className={css.listItem}>
           <h2 className={css.title}>{note.title}</h2>
           <p className={css.content}>{note.content}</p>
@@ -45,7 +45,7 @@ const NoteList = ({ notes }: NoteListProps) => {
               onClick={() => deleteMutation(note.id)}
               disabled={isPending && variables === note.id}
             >
-              {isPending && variables === note.id ? 'Deleting...' : 'Delete'}
+              {isPending && variables === note.id ? "Deleting..." : "Delete"}
             </button>
           </div>
         </li>

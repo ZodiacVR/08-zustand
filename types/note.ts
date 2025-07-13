@@ -1,7 +1,7 @@
 export type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';
 
 export interface Note {
-  id: number;
+  id: string;
   title: string;
   content: string;
   tag: NoteTag;
@@ -19,4 +19,21 @@ export interface NewNotePayload {
 export interface NotesResponse {
   notes: Note[];
   totalPages: number;
+}
+export interface FetchNotesParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  tag?: string;
+}
+
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+export interface FetchNotesParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  tag?: string;
 }
